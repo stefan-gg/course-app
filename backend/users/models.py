@@ -21,11 +21,11 @@ class User(AbstractUser):
     # if we don't want username field just uncomment line of code
     # below and change REQUIRED_FIELDS and run migrations after that
     #USERNAME_FIELD = 'email'
-    #REQUIRED_FIELDS = ['email', 'username']
+    #REQUIRED_FIELDS = ['email']
 
     # might delete later
     def is_user(self):
-        return self.user_role is self.UserRole.USER
+        return self.user_role == self.UserRole.USER
     
     def is_author(self):
-        return self.user_role is self.UserRole.AUTHOR
+        return self.user_role == self.UserRole.AUTHOR

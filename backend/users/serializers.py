@@ -1,9 +1,11 @@
 from rest_framework import serializers
 
-from .models import User
+from users.models import User
 
-class UserSerializer(serializers.Serializer):
-    
+class UserSerializer(serializers.ModelSerializer):
+
+    password = serializers.CharField(write_only = True)
+
     class Meta:
         model = User
         fields = [
@@ -12,8 +14,12 @@ class UserSerializer(serializers.Serializer):
             'password',
             'first_name',
             'last_name',
-            'role',
+            'user_role',
         ]
+        # another way of making password read_only field
+        # extra_kwargs = {
+        #     'password' : {'write_only' : True}
+        # }
 
     def create(self, validated_data):
 
@@ -22,11 +28,17 @@ class UserSerializer(serializers.Serializer):
             email = validated_data['email'],
             first_name = validated_data['first_name'],
             last_name = validated_data['last_name'],
-            role = validated_data['role']
+            user_role = validated_data['user_role']
         )
 
         user.set_password(validated_data['password'])
-        user.save()
+        
+        if user.user_role == user.UserRole.ADMIN:
+            user.is_staff = True
+            user.is_superuser = True
 
+        print(user.user_role == user.UserRole.ADMIN)
+
+        user.save()
+        
         return user
-    
