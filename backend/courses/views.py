@@ -3,7 +3,8 @@ from rest_framework import generics
 from courses.models import Course
 from courses.serializers import CourseSerializer
 
-#TODO add listing -> all courses for author and add user authorization
+# TODO add listing -> all courses for author and add user authorization
+
 
 class ListCreateCourse(generics.ListCreateAPIView):
     queryset = Course.objects.all()
@@ -20,6 +21,6 @@ class CourseDestroyDetailUpdate(generics.RetrieveUpdateDestroyAPIView):
 
     def perform_update(self, serializer):
         return super().perform_update(serializer)
-    
+
     def perform_destroy(self, instance):
         return super().perform_destroy(instance)

@@ -17,10 +17,7 @@ class User(AbstractUser):
             "AUTHOR",
             _("Author"),
         )
-        USER = (
-            "USER",
-            _("User")
-        )
+        USER = ("USER", _("User"))
 
     user_role = models.CharField(
         max_length=6, choices=UserRole.choices, default=UserRole.USER
