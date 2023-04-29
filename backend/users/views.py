@@ -1,7 +1,7 @@
 from rest_framework import generics
 
 from users.models import User
-from users.serializers import UserSerializer
+from users.serializers import UserSerializer, UpdateUserSerializer
 
 
 class UserListCreateAPIView(generics.ListCreateAPIView):
@@ -14,7 +14,7 @@ class UserListCreateAPIView(generics.ListCreateAPIView):
 
 class UserDestroyDetailUpdateAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
-    serializer_class = UserSerializer
+    serializer_class = UpdateUserSerializer
     lookup_field = "pk"
 
     def perform_update(self, serializer, *args, **kwargs):

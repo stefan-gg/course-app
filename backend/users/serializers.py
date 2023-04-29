@@ -4,9 +4,7 @@ from users.models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(required=False)
-    password = serializers.CharField(write_only=True, required=False)
-    email = serializers.EmailField(required=False)
+    password = serializers.CharField(write_only=True, required=True)
 
     class Meta:
         model = User
@@ -43,6 +41,41 @@ class UserSerializer(serializers.ModelSerializer):
         user.save()
 
         return user
+
+    # def update(self, instance, validated_data):
+    #     for key, value in validated_data.items():
+    #         setattr(instance, key, value)
+
+    #     if "password" in validated_data.keys():
+    #         instance.set_password(validated_data["password"])
+
+    #     if instance.user_role == instance.UserRole.ADMIN:
+    #         instance.is_staff = True
+    #         instance.is_superuser = True
+    #     else:
+    #         instance.is_staff = False
+    #         instance.is_superuser = False
+
+    #     instance.save()
+
+    #     return instance
+
+
+class UpdateUserSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(required=False)
+    password = serializers.CharField(write_only=True, required=False)
+    email = serializers.EmailField(required=False)
+
+    class Meta:
+        model = User
+        fields = [
+            "username",
+            "email",
+            "password",
+            "first_name",
+            "last_name",
+            "user_role",
+        ]
 
     def update(self, instance, validated_data):
         for key, value in validated_data.items():
