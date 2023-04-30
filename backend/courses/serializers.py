@@ -5,8 +5,9 @@ from courses.models import Course
 
 class CourseSerializer(serializers.ModelSerializer):
     course_image = serializers.ImageField(use_url=False, required=True)
-    author_id = serializers.CharField(source = "course.author_id", required = False)
-    author_username = serializers.CharField(source = "author_id.username", read_only = True)
+    author_id = serializers.CharField(source="course.author_id", required=False)
+    author_username = serializers.CharField(source="author_id.username", read_only=True)
+
     class Meta:
         model = Course
 
@@ -17,10 +18,10 @@ class CourseSerializer(serializers.ModelSerializer):
             "price",
             "course_image",
             "author_id",
-            "author_username"
+            "author_username",
         ]
 
-        
+
 class UpdateCourseSerializer(serializers.ModelSerializer):
     course_image = serializers.ImageField(use_url=False, required=False)
 

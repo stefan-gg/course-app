@@ -8,10 +8,9 @@ from courses.serializers import CourseSerializer, UpdateCourseSerializer
 from courses.mixins import CourseQuerySetMixin
 from courses.permissions import CoursePermission
 
+
 class ListCreateCourse(
-    CoursePermission,
-    CourseQuerySetMixin,
-    generics.ListCreateAPIView
+    CoursePermission, CourseQuerySetMixin, generics.ListCreateAPIView
 ):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
@@ -22,15 +21,13 @@ class ListCreateCourse(
         #     raise ValidationError(
         #         detail={"error":"Invalid value was passed for the author field"}
         #         )
-        # else : 
+        # else :
         serializer.validated_data["author_id"] = self.request.user
         return super().perform_create(serializer)
 
 
 class CourseDestroyDetailUpdate(
-    CoursePermission, 
-    CourseQuerySetMixin, 
-    generics.RetrieveUpdateDestroyAPIView
+    CoursePermission, CourseQuerySetMixin, generics.RetrieveUpdateDestroyAPIView
 ):
     queryset = Course.objects.all()
     serializer_class = UpdateCourseSerializer
