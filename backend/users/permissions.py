@@ -12,19 +12,12 @@ class UserPermission(permissions.DjangoModelPermissions):
         if user.is_anonymous:
             return False
 
-        # if request.method in permissions.SAFE_METHODS:
-        #     return True
-        #print(user.is_author or user.is_user and method != "POST")
-
-        if (user.is_author or user.is_user) and method != "POST":
+        if (user.is_author() or user.is_user()) and method != "POST":
             return True
 
         return False
-    
+
     def has_object_permission(self, request, view, obj):
-        if request.user.is_anonymous:
-            return False
-        
         if request.user.is_staff:
             return True
 

@@ -1,12 +1,10 @@
 from rest_framework import generics
-from users.mixins import UserMixin
+from rest_framework.permissions import IsAuthenticated
 
+from users.mixins import UserMixin
 from users.models import User
 from users.permissions import UserPermission
 from users.serializers import UserSerializer, UpdateUserSerializer
-
-# TODO check delete for user and for admin
-# TODO register for anonymous and create admin only for admin
 
 
 class UserListCreateAPIView(UserMixin, UserPermission, generics.ListCreateAPIView):
@@ -29,7 +27,7 @@ class UserDestroyDetailUpdateAPIView(
     queryset = User.objects.all()
     serializer_class = UpdateUserSerializer
     lookup_field = "pk"
-    permission_classes = [UserPermission]
+    permission_classes = [IsAuthenticated, UserPermission]
 
     def perform_update(self, serializer, *args, **kwargs):
         user = self.request.user

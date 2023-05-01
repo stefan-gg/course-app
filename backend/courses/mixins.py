@@ -8,8 +8,8 @@ class CourseQuerySetMixin:
         # lookup_data[self._user_field] = user.id
         qs = super().get_queryset(*args, **kwargs)
 
-        if user.is_anonymous:
-            return None
+        # if user.is_anonymous:
+        #     return None
 
         if user.is_author:
             return qs.filter(author_id=user)

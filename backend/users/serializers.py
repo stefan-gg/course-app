@@ -30,7 +30,7 @@ class UserSerializer(serializers.ModelSerializer):
         if validated_data["user_role"] == "ADMIN" and not logged_user_is_admin:
             save_user = False
             raise ValidationError({"error": "User role cannot be set"})
-        
+
         if save_user:
             user = User.objects.create(
                 username=validated_data["username"],
@@ -45,7 +45,7 @@ class UserSerializer(serializers.ModelSerializer):
             if user.user_role == user.UserRole.ADMIN:
                 user.is_staff = True
                 user.is_superuser = True
-        
+
             user.save()
 
             return user
@@ -79,6 +79,7 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         if "password" in validated_data.keys():
             instance.set_password(validated_data["password"])
 
+        # TODO reformat username and email IF statement (using dict)
         if "username" in validated_data.keys():
             user_username = User.objects.filter(username=validated_data["username"])
 

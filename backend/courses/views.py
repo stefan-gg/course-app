@@ -1,7 +1,6 @@
 from rest_framework import generics
-from rest_framework import status
-from rest_framework.response import Response
-from rest_framework.exceptions import ValidationError
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.exceptions import NotAcceptable
 
 from courses.models import Course
 from courses.serializers import CourseSerializer, UpdateCourseSerializer
@@ -14,16 +13,14 @@ class ListCreateCourse(
 ):
     queryset = Course.objects.all()
     serializer_class = CourseSerializer
-    permission_classes = [CoursePermission]
+    permission_classes = [IsAuthenticated, CoursePermission]
 
     def perform_create(self, serializer):
-        # if serializer.validated_data["author_id"] != self.request.user:
-        #     raise ValidationError(
-        #         detail={"error":"Invalid value was passed for the author field"}
-        #         )
-        # else :
-        serializer.validated_data["author_id"] = self.request.user
-        return super().perform_create(serializer)
+        if self.request.user.user_role != "AUTHOR":
+            raise NotAcceptable(detail={"error": "Action denied"})
+        else:
+            serializer.validated_data["author_id"] = self.request.user
+            return super().perform_create(serializer)
 
 
 class CourseDestroyDetailUpdate(
@@ -32,7 +29,7 @@ class CourseDestroyDetailUpdate(
     queryset = Course.objects.all()
     serializer_class = UpdateCourseSerializer
     lookup_field = "pk"
-    permission_classes = [CoursePermission]
+    permission_classes = [IsAuthenticated, CoursePermission]
 
     def perform_update(self, serializer):
         return super().perform_update(serializer)

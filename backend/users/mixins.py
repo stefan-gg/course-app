@@ -4,8 +4,8 @@ class UserMixin:
 
         qs = super().get_queryset(*args, **kwargs)
 
-        if user.is_anonymous:
-            return None
+        # if user.is_anonymous:
+        #     return None
 
         if user.is_staff:
             return qs
