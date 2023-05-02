@@ -26,7 +26,7 @@ class UserDestroyDetailUpdateAPIView(
 ):
     queryset = User.objects.all()
     serializer_class = UpdateUserSerializer
-    lookup_field = "pk"
+    lookup_field = "uuid"
     permission_classes = [IsAuthenticated, UserPermission]
 
     def perform_update(self, serializer, *args, **kwargs):

@@ -9,6 +9,7 @@ import uuid
 # like hashing password and all attribute fields we need for our User model
 class User(AbstractUser):
     uuid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
+
     # The class defines a set of choices for user roles, including admin, author, and user.
     class UserRole(models.TextChoices):
         ADMIN = (

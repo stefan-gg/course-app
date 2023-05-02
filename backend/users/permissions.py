@@ -15,7 +15,7 @@ class UserPermission(permissions.DjangoModelPermissions):
         if (user.is_author() or user.is_user()) and method != "POST":
             return True
 
-        return False
+        return user.is_staff
 
     def has_object_permission(self, request, view, obj):
         if request.user.is_staff:

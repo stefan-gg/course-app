@@ -3,14 +3,15 @@
 from django.db import migrations
 import uuid
 
+
 def gen_uuid(apps, schema_editor):
-    MyModel = apps.get_model('users', 'user')
+    MyModel = apps.get_model("users", "user")
     for row in MyModel.objects.all():
         row.uuid = uuid.uuid4()
-        row.save(update_fields=['uuid'])
+        row.save(update_fields=["uuid"])
+
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("users", "0002_user_uuid"),
     ]

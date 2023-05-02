@@ -11,7 +11,7 @@ class CourseQuerySetMixin:
         # if user.is_anonymous:
         #     return None
 
-        if user.is_author:
+        if user.is_author():
             return qs.filter(author_id=user)
 
         return qs

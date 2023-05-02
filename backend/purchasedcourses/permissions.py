@@ -5,9 +5,6 @@ class PurchasedCoursePermission(permissions.DjangoModelPermissions):
     def has_permission(self, request, view):
         user = request.user
 
-        if request.method in permissions.SAFE_METHODS and not user.is_authenticated:
-            return False
-
         if user.is_user():
             return True
 
