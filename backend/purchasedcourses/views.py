@@ -24,7 +24,7 @@ class DetailPurchasedCourses(
     lookup_field = "pk"
     permission_classes = [IsAuthenticated, PurchasedCoursePermission]
 
-
+#TODO check if the course is already bought by the user.
 class CreatePurchase(
     PurchasedCoursePermission, PurchasedCourseMixin, generics.CreateAPIView
 ):

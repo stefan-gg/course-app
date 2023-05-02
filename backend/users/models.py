@@ -1,12 +1,14 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.utils.translation import gettext_lazy as _
+import uuid
 
 
 # AbstractUser is being used because it comes
 # with a lot of things we need
 # like hashing password and all attribute fields we need for our User model
 class User(AbstractUser):
+    uuid = models.UUIDField(default=uuid.uuid4, unique=True, editable=False)
     # The class defines a set of choices for user roles, including admin, author, and user.
     class UserRole(models.TextChoices):
         ADMIN = (

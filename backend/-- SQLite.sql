@@ -1,0 +1,1 @@
+DELETE FROM purchasedcourses_purchasedcourse WHERE id = 5
