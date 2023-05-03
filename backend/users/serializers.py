@@ -72,10 +72,10 @@ class UpdateUserSerializer(serializers.ModelSerializer):
         ]
 
     def update(self, instance, validated_data):
-        user_username = None
-        user_email = None
         update_user = True
         logged_user_is_admin = validated_data.pop("logged_in_user_role") == "ADMIN"
+        errors = list()
+        unique_fields = ("username", "email")
 
         # only admin user can give another user ADMIN role
         if validated_data["user_role"] == "ADMIN" and not logged_user_is_admin:
@@ -83,32 +83,35 @@ class UpdateUserSerializer(serializers.ModelSerializer):
             raise ValidationError({"error": "User role cannot be set"})
 
         if update_user:
-            for key, value in validated_data.items():
-                setattr(instance, key, value)
+            for field in unique_fields:
+                user = is_data_unique(field, validated_data[field])
 
-            if "password" in validated_data.keys():
-                instance.set_password(validated_data["password"])
+                if user:
+                    errors.append(field)
 
-            # TODO reformat username and email IF statement (using dict)
-            if "username" in validated_data.keys():
-                user_username = User.objects.filter(username=validated_data["username"])
+            for error in errors:
+                raise ValidationError({"error": "{} must be unique".format(error)})
 
-            if "email" in validated_data.keys():
-                user_email = User.objects.filter(email=validated_data["email"])
+            if not errors:
+                for key, value in validated_data.items():
+                    setattr(instance, key, value)
 
-            if user_username:
-                raise ValidationError({"error": "Username must be unique"})
+                if "password" in validated_data.keys():
+                    instance.set_password(validated_data["password"])
 
-            if user_email:
-                raise ValidationError({"error": "Email must be unique"})
+                if instance.user_role == instance.UserRole.ADMIN:
+                    instance.is_staff = True
+                    instance.is_superuser = True
+                else:
+                    instance.is_staff = False
+                    instance.is_superuser = False
 
-            if instance.user_role == instance.UserRole.ADMIN:
-                instance.is_staff = True
-                instance.is_superuser = True
-            else:
-                instance.is_staff = False
-                instance.is_superuser = False
-
-            instance.save()
+                instance.save()
 
             return instance
+
+
+def is_data_unique(field_to_check, data_to_check):
+    return User.objects.raw(
+        "SELECT * from users_user WHERE " + field_to_check + " LIKE %s", [data_to_check]
+    )
