@@ -1,7 +1,7 @@
 # course-app
 Note: This is still a work in progress. 
 
-I am planning to add: comments, discounts, and implementation with some payment methods...
+I am planning to add: UUDI field to Course, comments, discounts, and implementation with some payment methods...
 
 # Applications contain 3 types of users: **User**, **Author**, and **Admin**. 
 
